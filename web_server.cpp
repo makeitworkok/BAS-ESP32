@@ -1,30 +1,67 @@
+#include <Arduino.h>
 #include <WebServer.h>
-#include <LittleFS.h>
-#include "config.h"
-#include "net_config.h"
+#include <Preferences.h>
+#include "modbus_rtu.h"
+#include "modbus_scan.h"
+#include "mstp_scan/mstp_scan.h"
 
 WebServer server(80);
 
-void handleRoot() {
-  File file = LittleFS.open("/index.html", "r");
-  server.streamFile(file, "text/html");
-  file.close();
-}
-
-void handleSave() {
-  if (server.hasArg("ip")) {
-    IPAddress newIP;
-    sscanf(server.arg("ip").c_str(), "%hhu.%hhu.%hhu.%hhu", &newIP[0], &newIP[1], &newIP[2], &newIP[3]);
-    saveIP(newIP);
-    server.send(200, "text/plain", "Saved. Rebooting...");
-    delay(500);
-    ESP.restart();
+void handleModbusConfig() {
+  if (server.hasArg("baud")) {
+    int baud = server.arg("baud").toInt();
+    if (baud >= 1200 && baud <= 115200) {
+      Preferences prefs;
+      prefs.begin("modbus", false);
+      prefs.putInt("baud", baud);
+      prefs.end();
+      server.send(200, "text/plain", "Baud rate set. Rebooting...");
+      delay(500);
+      ESP.restart();
+    } else {
+      server.send(400, "text/plain", "Invalid baud rate");
+    }
   }
 }
 
+void handleRS485Protocol() {
+  if (server.hasArg("protocol")) {
+    String proto = server.arg("protocol");
+    if (proto == "modbus" || proto == "bacnet") {
+      Preferences prefs;
+      prefs.begin("rs485", false);
+      prefs.putString("protocol", proto);
+      prefs.end();
+      server.send(200, "text/plain", "Protocol set. Rebooting...");
+      delay(500);
+      ESP.restart();
+    } else {
+      server.send(400, "text/plain", "Invalid protocol selection");
+    }
+  }
+}
+
+void handleModbusScan() {
+  server.send(200, "text/plain", "Modbus scan started. Check serial log.");
+  scanModbusRTUDevices();
+}
+
+void handleMSTPScan() {
+  server.send(200, "text/plain", "BACnet MS/TP scan started. Check serial log.");
+  startMSTPScan();
+}
+
+void handleRoot() {
+  server.send(200, "text/html", "<html><body><h1>BAS-ESP32 Web Server</h1></body></html>");
+}
+
 void startWebServer() {
-  LittleFS.begin();
   server.on("/", handleRoot);
-  server.on("/save", HTTP_POST, handleSave);
+  server.on("/modbus-config", HTTP_POST, handleModbusConfig);
+  server.on("/rs485-protocol", HTTP_POST, handleRS485Protocol);
+  server.on("/start-modbus-scan", HTTP_POST, handleModbusScan);
+  server.on("/start-mstp-scan", HTTP_POST, handleMSTPScan);
+
   server.begin();
+  Serial.println("Web server started.");
 }
