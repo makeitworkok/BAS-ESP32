@@ -62,6 +62,11 @@ void startWebServer() {
   server.on("/start-modbus-scan", HTTP_POST, handleModbusScan);
   server.on("/start-mstp-scan", HTTP_POST, handleMSTPScan);
 
+  
+  server.on("/start-ip-scan", HTTP_POST, []() {
+    server.send(200, "text/plain", "IP scan started. Check serial log.");
+    scanIPNetwork();
+  });
   server.begin();
   Serial.println("Web server started.");
 }
