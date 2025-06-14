@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BAS-ESP32 Config</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, button, select { margin: 5px 0; padding: 5px; width: 100%; }
+    .section { margin-bottom: 20px; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>BAS-ESP32 Configuration</h2>
+
+  <div class="section">
+    <label>Set Static IP</label>
+    <form method="POST" action="/save">
+      <input name="ip" type="text" placeholder="e.g., 10.46.12.2" required>
+      <input type="submit" value="Save and Reboot">
+    </form>
+  </div>
+
+  <div class="section">
+    <label>Scan Options</label>
+    <form method="POST" action="/scan">
+      <select name="mode">
+        <option value="modbus">Modbus TCP</option>
+        <option value="bacnet">BACnet/IP</option>
+        <option value="simulate">Simulation Mode</option>
+      </select>
+      <input name="range" type="text" placeholder="Scan Range (e.g., 10.46.12.1-254)">
+      <input type="submit" value="Start Scan">
+    </form>
+  </div>
+
+  <div class="section">
+    <label>Upload Firmware (OTA)</label>
+    <form method="POST" action="/update" enctype="multipart/form-data">
+      <input type="file" name="update" required>
+      <input type="submit" value="Upload and Reboot">
+    </form>
+  </div>
+
+  <div class="section">
+    <label>Export Logs</label>
+    <form method="GET" action="/export">
+      <button type="submit">Download CSV</button>
+    </form>
+  </div>
+</body>
+</html>
