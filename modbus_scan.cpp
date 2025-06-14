@@ -1,6 +1,14 @@
 #include "modbus_scan.h"
-#include <Ethernet.h>
+#include "modbus_rtu.h"
+#include <Arduino.h>
 
-void scanModbus() {
-  // Placeholder: implement TCP connect to port 502 and send Modbus request
+void scanModbusRTUDevices() {
+  Serial.println("Scanning Modbus RTU bus...");
+  for (uint8_t id = 1; id <= 247; id++) {
+    if (pingModbusDevice(id)) {
+      Serial.print("Found device at ID: ");
+      Serial.println(id);
+    }
+    delay(50);
+  }
 }

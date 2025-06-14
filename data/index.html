@@ -14,38 +14,34 @@
   <h2>BAS-ESP32 Configuration</h2>
 
   <div class="section">
-    <label>Set Static IP</label>
-    <form method="POST" action="/save">
-      <input name="ip" type="text" placeholder="e.g., 10.46.12.2" required>
-      <input type="submit" value="Save and Reboot">
-    </form>
-  </div>
-
-  <div class="section">
-    <label>Scan Options</label>
-    <form method="POST" action="/scan">
-      <select name="mode">
-        <option value="modbus">Modbus TCP</option>
-        <option value="bacnet">BACnet/IP</option>
-        <option value="simulate">Simulation Mode</option>
+    <label>RS-485 Protocol</label>
+    <form method="POST" action="/rs485-protocol">
+      <select name="protocol">
+        <option value="modbus">Modbus RTU</option>
+        <option value="bacnet">BACnet MS/TP</option>
       </select>
-      <input name="range" type="text" placeholder="Scan Range (e.g., 10.46.12.1-254)">
-      <input type="submit" value="Start Scan">
+      <input type="submit" value="Set Protocol">
     </form>
   </div>
 
   <div class="section">
-    <label>Upload Firmware (OTA)</label>
-    <form method="POST" action="/update" enctype="multipart/form-data">
-      <input type="file" name="update" required>
-      <input type="submit" value="Upload and Reboot">
+    <label>Modbus RTU Baud Rate</label>
+    <form method="POST" action="/modbus-config">
+      <select name="baud">
+        <option value="9600">9600</option>
+        <option value="19200">19200</option>
+        <option value="38400">38400</option>
+        <option value="57600">57600</option>
+        <option value="115200">115200</option>
+      </select>
+      <input type="submit" value="Set Baud Rate">
     </form>
   </div>
 
   <div class="section">
-    <label>Export Logs</label>
-    <form method="GET" action="/export">
-      <button type="submit">Download CSV</button>
+    <label>Trigger Modbus RTU Scan</label>
+    <form method="POST" action="/start-modbus-scan">
+      <input type="submit" value="Scan for Devices">
     </form>
   </div>
 </body>

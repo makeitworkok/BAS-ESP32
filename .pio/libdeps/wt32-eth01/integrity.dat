@@ -1,0 +1,5 @@
+ESPAsyncTCP
+ESP Async WebServer
+espressif/arduino-esp32@^2.0.14
+LittleFS_esp32
+bodmer/U8g2@^2.34.22
