@@ -71,8 +71,8 @@ Other side	GND
                           |                             |
                           |                             |
          GND o------------+-----------------------------+
-         5V  o----+                                        
-                  |                                        
+         5V  o----+                                       
+                  |                                       
                   |                  +-----------------+      
                   +----------------->| VCC             |        
                                      |                 |
@@ -100,7 +100,8 @@ Factory Reset Button
   One side -> GPIO13
   Other side -> GND
   (Use INPUT_PULLUP in code)
-
+  
+  
 
 ⸻
 
