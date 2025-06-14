@@ -62,8 +62,7 @@ Other side	GND
 
 
 ⸻
-
-🖧 Wiring Diagram
+Wiring Diagram
 
                           +-----------------------------+
                           |         WT32-ETH01          |
